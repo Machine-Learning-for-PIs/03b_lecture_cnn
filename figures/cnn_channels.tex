@@ -1,0 +1,90 @@
+\documentclass{standalone}
+\usepackage[utf8]{inputenc}
+\usepackage{pgfplots}
+\usepackage{tikz}
+\usepackage{epigraph}
+%\usepackage{xcolor}
+
+%\definecolor{blue2}{RGB}{38,139,210}
+\definecolor{cyan}{RGB}{42,161,152}
+\definecolor{violet}{RGB}{108,113,196}
+\definecolor{red}{RGB}{220,50,47}
+%\definecolor{base01}{RGB}{88,110,117}
+%\definecolor{base02}{RGB}{7,54,66}
+%\definecolor{base03}{RGB}{0,43,54}
+
+\usepackage[framemethod=tikz]{mdframed}
+\usetikzlibrary{positioning}
+%\DeclareUnicodeCharacter{2212}{−}
+\usepgfplotslibrary{groupplots,dateplot}
+\usetikzlibrary{patterns,shapes.arrows}
+\pgfplotsset{compat=newest}
+\begin{document}
+\tikzstyle{gate}=[rectangle,fill=yellow!50,minimum size=17pt,inner sep=0pt]
+\tikzstyle{tanGate}=[rectangle,fill=orange!50,minimum size=17pt,inner sep=0pt]
+\tikzstyle{fun}=[ellipse,fill=orange!50,minimum size=17pt,inner sep=0pt]
+\tikzstyle{merge}=[rectangle,fill=green!50,minimum size=17pt,inner sep=0pt]
+\tikzstyle{times}=[rectangle,fill=red!50,minimum size=17pt,inner sep=0pt]
+\tikzstyle{plus}=[rectangle,fill=blue!50,minimum size=17pt,inner sep=0pt]
+\tikzstyle{conv}=[rectangle,fill=teal!50,minimum size=17pt,inner sep=0pt]
+
+\rotatebox{-90}{
+\begin{tikzpicture}[scale=.3,every node/.style={minimum size=1cm}, on grid]
+    \begin{scope}[xshift=0cm,yshift=-.5cm]
+        \begin{scope}[xshift=0cm,yshift=-.5cm]
+            \draw[draw=black,fill=orange!50]
+                (0,0) grid (5,5) rectangle (0,0);
+        \end{scope}
+        \begin{scope}[xshift=0.5cm,yshift=0.0cm]
+            \draw[draw=black,fill=yellow!50]
+                (0,0) grid (5,5) rectangle (0,0);
+        \end{scope}
+    \end{scope}
+    \foreach \x in {-10,1,11} {%
+        \begin{scope}[xshift=\x cm,yshift=10cm]
+            \begin{scope}[xshift=0cm,yshift=0cm]
+                \draw[draw=black,fill=orange!50]
+                    (0,0) grid (3,3) rectangle (0,0);
+            \end{scope}
+            \begin{scope}[xshift=0.5cm,yshift=0.5cm]
+                \draw[draw=black,fill=yellow!50]
+                    (0,0) grid (3,3) rectangle (0,0);
+            \end{scope}
+        \end{scope}
+        \begin{scope}[xshift=\x cm,yshift=20cm]\begin{scope}[xshift=0.5cm]
+            \draw[draw=black,fill=green!50]
+                (0,0) grid (3,3) rectangle (0,0);
+        \end{scope}\end{scope}
+    }
+    \begin{scope}[xshift=1cm,yshift=30cm]
+        \foreach \s in {0.0,0.5,1.0} {%
+            \begin{scope}[xshift=\s cm,yshift=\s cm]
+                \draw[draw=black,fill=green!50]
+                    (0,0) grid (3,3) rectangle (0,0);
+            \end{scope}
+        }
+    \end{scope}
+    \node[conv] (c1) at (-8.5,7.5) {$*$};
+    \draw[->] (-0.5,1.5) -| (c1); %(-8.5,9.5);
+    \draw[->] (c1) -- (-8.5,9.5);
+    \node[conv] (c2) at (3,7.5) {$*$};
+    \draw[->] (3,5.) -- (c2);  %(3,9.5);
+    \draw[->] (c2) -- (3, 9.5);
+    \node[conv] (c3) at (12.5, 7.5) {$*$};
+    \draw[->] (6,2) -| (c3); %(12.5,9.5);
+    \draw[->] (c3) -- (12.5, 9.5);
+    \draw[->]  (-8,14.5) to (-8,16);
+    \draw[->]  (-8,18) to (-8,19.5);
+    \node[plus] (p1) at (-8,17) {$+$};
+    \draw[->] (3,14.5) to (3,16);
+    \draw[->]  (3,18) to (3,19.5);
+    \node[plus] (p2) at (3,17) {$+$};
+    \draw[->] (13,14.5) to (13,16);
+    \draw[->]  (13,18) to (13,19.5);
+    \node[plus] (p3) at (13,17) {$+$};
+    \draw[->]  (-8,23.5) |- (0.8,31.5);
+    \draw[->]  (3,23.5) -- (3,29.5);
+    \draw[->]  (13,23.5) |- (5.2,32.5);
+\end{tikzpicture}
+}
+\end{document}
