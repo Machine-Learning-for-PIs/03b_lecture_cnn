@@ -1,1 +1,1 @@
-## Introduction to Feed Forward Networks
+## Introduction to Convolutional Neural Networks
