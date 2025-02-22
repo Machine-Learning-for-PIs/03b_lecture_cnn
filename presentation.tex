@@ -61,9 +61,11 @@
 \usetheme{metropolis}           % Use metropolis theme
 \setbeamertemplate{caption}[default]
 \title{Introduction to Convolutional Neural Networks}
-\date{\today}
-\institute{High Performance Computing and Analytics Lab, University of Bonn}
-\author{Moritz Wolter}
+\date{February 24, 2025}%{\today}
+%\institute{High-Performance Computing and Analytics Lab}
+%\author{Moritz Wolter}
+\institute{Visual Computing Group, University of Bonn}
+\author{Elena Trunz}
 
 \titlegraphic{\includegraphics[width=2.00cm]{UNI_Bonn_Logo_Standard_RZ.pdf}}
 \begin{document}
@@ -74,28 +76,63 @@
     \tableofcontents
     \end{frame}
 
-    \begin{frame}{Motivation \cite{goodfellow2016deep}}
-        \begin{itemize}
-            \item sparse interactions
-            \item parameter sharing
-            \item equivariant representations (i.e. with respect to translation)
-            \item efficiency
-            \item Train deeper networks.
-        \end{itemize}
-        \note{
-            Sparse interactions: From dense to block circulant matrix. \\
-            Parameter sharing: Use the same parameters for more than one job. \\
-            Equvariance: Translations of an input should not change the outcome.
-        }
-    \end{frame}
+    %\begin{frame}{Motivation \cite{goodfellow2016deep}}
+        %\begin{itemize}
+            %\item sparse interactions
+            %\item parameter sharing
+            %\item equivariant representations (i.e. with respect to translation)
+            %\item efficiency
+            %\item Train deeper networks.
+        %\end{itemize}
+        %\note{
+            %Sparse interactions: From dense to block circulant matrix. \\
+            %Parameter sharing: Use the same parameters for more than one job. \\
+            %Equvariance: Translations of an input should not change the outcome.
+        %}
+    %\end{frame}
+		
+		\section{Why Convolution?}
+		\begin{frame}{Invariance in the network structure}
+	\begin{figure}
+        \includestandalone[width=0.7\linewidth,height=1.5cm]{./figures/mnist_sequence}
+      \end{figure}
+			\begin{itemize}
+		\item Consider the task of recognizing handwritten digits:
+		\begin{itemize}
+			\item Input image: set of pixel intensities
+			\item Desired output: posterior probability over the ten digits
+		\end{itemize} %\pause
+		\item A system recognizing digits should be invariant to
+		\begin{itemize}
+			\item Translations
+			\item Scaling
+			\item (Small) rotations
+			\item Some elastic deformations
+		\end{itemize}
+		\end{itemize}
+	\end{frame}
+
+	\begin{frame}{Fully connected network?}
+	\begin{itemize}
+		\item Given enough training data a fully connected network solves the task. %\pause
+		\item However, we can do better: %\pause
+		\begin{itemize}
+			\item Pixels near to each other are more correlated to each other than pixels far apart. %\pause
+			\item Local features which are useful in one region of the image are likely to be useful elsewhere as well, e.g. for detecting a translated object.
+		\end{itemize} %\pause
+		%\item In 1989 Yann LeCun proposed to build such invariance properties into the structure of a neural network. This is the basis for convolutional neural networks.
+	\end{itemize} 
+	\end{frame}
 
     \begin{frame}{The invention of convolutional neural networks}
-        Proposed in Yann le Cun's \cite{lecun1989handwritten}.
-        
-        \includegraphics[width=.8\linewidth]{figures/IMG_20220923_090433.jpg}
+        %Proposed in Yann le Cun's \cite{lecun1989handwritten}.
+        In 1989 Yann LeCun proposed to build invariance properties into the structure of a neural network. This is the basis for convolutional neural networks.
+				\begin{figure}%
+				\centering
+				\includegraphics[width=.6\linewidth]{figures/IMG_20220923_090433.jpg}
+				\end{figure}   
     \end{frame}
-
-
+		
     \section{The convolution operation in machine learning}
 
     \begin{frame}{Defining convolution}
