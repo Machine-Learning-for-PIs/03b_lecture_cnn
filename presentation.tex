@@ -27,6 +27,7 @@
 \usepackage{amsthm}
 \usepackage{multimedia}
 \usepackage{standalone}
+\usepackage{caption}
 \usepackage{csquotes}
 
 % python listings
@@ -55,6 +56,12 @@
   %natbib=true % natbib compatibility mode (\citep and \citet still work)
 }{biblatex}
 \usepackage{biblatex}
+\input{macros.tex}
+% Redefine the caption format to remove "Figure"
+\captionsetup[figure]{labelformat=empty}
+
+\newcommand{\referencefootnote}[1]{\setbeamertemplate{footline}[text line]{%%%
+\parbox{0.9\paperwidth}{\vspace*{-23pt}\tiny{\textcolor{gray}{#1}}\hfill\scriptsize\insertframenumber}}}
 
 \addbibresource{bib.bib}
 
@@ -133,32 +140,52 @@
 				\end{figure}   
     \end{frame}
 		
-    \section{The convolution operation in machine learning}
+    \section{Convolution operation in machine learning}
 
-    \begin{frame}{Defining convolution}
-        For two one-dimensional signals $x \in \mathbb{R}^T$
+    %\begin{frame}{Defining convolution}
+			%For two one-dimensional signals $x \in \mathbb{R}^T$
+        %and $k \in \mathbb{R}^T$, convolution is defined as
+        %\begin{align}
+            %s(t) = (x * k)(t) = \sum_{a=0}^{T} x(a)k(t - a),
+        %\end{align}
+        %for numbers $t,a$. Possible $t$ will depend on signal length and padding. \\
+        %In 2D, we require a kernel matrix $K \in \mathbb{R}^{O,P}$ and a image matrix
+        %$I \in \mathbb{K}^{N,M}$
+        %\begin{align}
+            %S(i,j) = (K * I)(i,j) = \sum_m^M \sum_n^N I(i-m, j-n)K(n,m)
+        %\end{align}
+        %Again not just any $i,j$ will do. We will see what this means in a minute.
+    %\end{frame}
+		
+		 \begin{frame}{Defining discrete convolution}
+		\begin{itemize}
+			\item For two one-dimensional signals $x \in \mathbb{R}^T$
         and $k \in \mathbb{R}^T$, convolution is defined as
         \begin{align}
-            s(t) = (x * k)(t) = \sum_{a=0}^{T} x(a)k(t - a),
+            s(t) = (x * k)(t) = \sum_{m=0}^{T} x(m)k(t - m),
         \end{align}
-        for numbers $t,a$. Possible $t$ will depend on signal length and padding. \\
-        In 2D, we require a kernel matrix $K \in \mathbb{R}^{O,P}$ and a image matrix
+				where $t$ denote the position in the output sequence. 
+        \item In 2D, we require a kernel matrix $K \in \mathbb{R}^{O,P}$ and a image matrix
         $I \in \mathbb{K}^{N,M}$
         \begin{align}
             S(i,j) = (K * I)(i,j) = \sum_m^M \sum_n^N I(i-m, j-n)K(n,m)
         \end{align}
-        Again not just any $i,j$ will do. We will see what this means in a minute.
+				where $(i,j)$ denote the position in the output image.
+				\end{itemize}
+				\note{$m$ and $n$ are indices that iterate over the elements of the input and the kernel.}
     \end{frame}
 
 
     \begin{frame}{Defining cross-correlation}
-        
+        \begin{itemize}
+					\item Cross-correlation is convolution without flipping the kernel: % \cite{goodfellow2016deep}
         \begin{align}
-            S(i,j) = (K*I) = \sum_m^M \sum_n^N I(i+m, j+n)K(m,n)
+            S(i,j) = (K*I)(i,j) = \sum_m^M \sum_n^N I(i+m, j+n)K(m,n)
         \end{align}
-        Cross-correlation is convolution without flipping the kernel \cite{goodfellow2016deep}.
-        Many machine-learning libraries implement cross-correlation and
-        call it convolution. In this course we will follow their example.
+        \item Many machine-learning libraries implement cross-correlation and
+        call it convolution. 
+				\item In this course we will follow their example.
+				\end{itemize}
     \note{
         A convolution example on the board: 
         \begin{align}
@@ -186,36 +213,109 @@
     }
     \end{frame}
 
-    \begin{frame}{Illustrating the convolution operation}
+    \begin{frame}{Convolution}
         \begin{figure}
             \centering
             \includegraphics[scale=0.7]{./figures/no_padding_no_strides_00.pdf}
             \includegraphics[scale=0.7]{./figures/no_padding_no_strides_01.pdf} \\
             \includegraphics[scale=0.7]{./figures/no_padding_no_strides_02.pdf}
             \includegraphics[scale=0.7]{./figures/no_padding_no_strides_03.pdf}
-            \caption{Illustration of the convolution operation without padding and unit strides \cite{dumoulin2016guide}.}
+            \caption{Illustration of the convolution operation \cite{dumoulin2016guide}.}
         \end{figure}
     \end{frame}
+		
+		\begin{frame}{Advantages of convolutions}
+	The convolution operation allows us to do this for inputs of varying sizes in a convenient way, and affords advantages of  %\pause 
+	\begin{enumerate}
+	\item local receptive fields (sparse connectivity limited in range vs. fully connected) %\pause 
+	\item parameter sharing (allows for detection of same features all over the image) %\pause 
+	\item equivariant representations and subsampling (reduces information hierarchically)
+	\end{enumerate}
+	\end{frame}
 
-    \begin{frame}{Strided convolution}
+
+	\begin{frame}{Sparse connectivity and interaction}
+	\footnotesize
+	\begin{itemize}
+		\item In CNNs, the kernel or filter is often much smaller than the input size.  This allows us to process images of varying sizes.  For an input image of millions of pixels we can still detect meaningful features which are local, such as edges. 
+		\item A small kernel does not mean that the area of interaction is limited.  For a deep network, the units may \emph{indirectly} interact with a larger portion of the input as information propagates up the layers:
+	\captionfig{figures/dl9_4}{0.35}{\footnotesize Unit $g_3$ indirectly interacts with the whole input \cite{goodfellow2016deep}}
+	\end{itemize}
+	\end{frame}
+
+{ \referencefootnote{Image was taken from \cite{goodfellow2016deep}}
+	\begin{frame}{Parameter sharing}
+	\footnotesize
+	\begin{itemize}
+		\item Standard feed-forward network has unit-specific weights. %\pause
+		\item Each weight is used only once when computing the activations for subsequent layers. %\pause
+		\item In a CNN, the weights of each kernel is applied to every position of the input. %\pause
+		\item This \emph{parameter sharing} reduces the amount of storage per model.
+		%\captionfig{figures/dl9_5}{0.3}{9.5 from Goodfellow}
+		\begin{figure}
+					\center
+					\includegraphics[scale=.4]{figures/dl9_5.pdf} 
+					%\caption{}
+					\end{figure}
+	\end{itemize}
+	\end{frame}
+	}
+	\note{The black arrows show connections that use a particular parameter set in two different models.  If we were to share parameters, then the single parameter (set) is used at all the input locations.  But if were to have a fully-connected layer, then this set of parameters would be used only once, which is shown in the bottom figure.}
+
+
+	\begin{frame}{Translation equivariance}
+	\begin{itemize}
+		\item An \emph{equivariant} function is one where for some given change in the input, the output changes in the same way.%\pause 
+		\item With images, convolution creates a 2-D map of where certain features appear in the input. If we move the object in the input, its representation will move the same amount in the output.
+	\end{itemize}
+	\end{frame}
+	\note{equivariance is useful for finding repeating patterns, e.g. line detection;}
+
+	\begin{frame}{Multiple filters / kernels}
+	\begin{itemize}
+		\item In the context of CNNs, we refer to convolution not in the strict mathematical sense, but an operation that applies many convolutions in parallel.
+		\item Convolution with a single kernel extracts only one kind of feature (at many spatial locations).
+		\item For each layer, however, we are interested in extracting many kinds of features (at many spatial locations). 
+	\end{itemize}
+	\end{frame}
+
+	\begin{frame}{Strided convolution}
+	\begin{itemize}
+		\item To save computational expense, we can skip over some positions of the kernel, i.e. not extract our feature response as finely.
+	\begin{figure}
+            \centering
+            \includegraphics[width=0.25\linewidth]{figures/no_padding_strides_00.pdf}
+            \includegraphics[width=0.25\linewidth]{figures/no_padding_strides_01.pdf} \\
+            \includegraphics[width=0.25\linewidth]{figures/no_padding_strides_02.pdf}
+            \includegraphics[width=0.25\linewidth]{figures/no_padding_strides_03.pdf}
+            \caption{Stride two convolutions \cite{dumoulin2016guide}.}
+        \end{figure}
+				\item[$\rightarrow$ Down-sampling]
+		\end{itemize}
+	\end{frame}
+	
+		{ \referencefootnote{Image was taken from \cite{goodfellow2016deep}}
+    \begin{frame}{Padded convolution}
+		\begin{itemize}
+			\item We can control the size of convolution inputs and outputs through padding. 
+			\item Without padding, the spatial extent of the network would shrink, with the rate of shrinking directly proportional to the size of the filter or kernel.  
         \begin{figure}
             \centering
-            \includegraphics[width=0.25\linewidth]{./figures/no_padding_strides_00.pdf}
-            \includegraphics[width=0.25\linewidth]{./figures/no_padding_strides_01.pdf} \\
-            \includegraphics[width=0.25\linewidth]{./figures/no_padding_strides_02.pdf}
-            \includegraphics[width=0.25\linewidth]{./figures/no_padding_strides_03.pdf}
-            \caption{Visualization of stride two convolutions without padding \cite{dumoulin2016guide}.}
+            \includegraphics[width=0.45\linewidth]{figures/dl9_13.pdf}
+            %\caption{}
         \end{figure}
+				\end{itemize}
     \end{frame}
+		}
 
-    \begin{frame}{Padded convolution}
+    \begin{frame}{Visualization of padded convolution}
         \begin{figure}
             \centering
             \includegraphics[width=0.25\linewidth]{./figures/full_padding_no_strides_00.pdf}
             \includegraphics[width=0.25\linewidth]{./figures/full_padding_no_strides_01.pdf} \\
             \includegraphics[width=0.25\linewidth]{./figures/full_padding_no_strides_02.pdf}
             \includegraphics[width=0.25\linewidth]{./figures/full_padding_no_strides_03.pdf}
-            \caption{Visualization of fully padded convolutions with unit strides \cite{dumoulin2016guide}.}
+            \caption{Fully padded convolutions with unit strides \cite{dumoulin2016guide}.}
         \end{figure}
     \end{frame}
 
