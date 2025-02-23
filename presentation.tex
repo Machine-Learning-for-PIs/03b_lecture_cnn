@@ -126,7 +126,7 @@
 		\begin{itemize}
 			\item Pixels near to each other are more correlated to each other than pixels far apart. %\pause
 			\item Local features which are useful in one region of the image are likely to be useful elsewhere as well, e.g. for detecting a translated object.
-		\end{itemize} %\pause
+		\end{itemize}
 		%\item In 1989 Yann LeCun proposed to build such invariance properties into the structure of a neural network. This is the basis for convolutional neural networks.
 	\end{itemize} 
 	\end{frame}
@@ -166,7 +166,7 @@
         \begin{align}
             s(t) = (x * k)(t) = \sum_{m=0}^{T} x(m)k(t - m),
         \end{align}
-				where $t$ denote the position in the output sequence. 
+				where $t$ denote the position in the output sequence. %\pause
         \item In 2D, we require a kernel matrix $K \in \mathbb{R}^{O,P}$ and a image matrix
         $I \in \mathbb{K}^{N,M}$
         \begin{align}
@@ -278,13 +278,13 @@
 		\item To save computational expense, we can skip over some positions of the kernel, i.e. not extract our feature response as finely.
 	\begin{figure}
             \centering
-            \includegraphics[width=0.25\linewidth]{figures/no_padding_strides_00.pdf}
-            \includegraphics[width=0.25\linewidth]{figures/no_padding_strides_01.pdf} \\
-            \includegraphics[width=0.25\linewidth]{figures/no_padding_strides_02.pdf}
-            \includegraphics[width=0.25\linewidth]{figures/no_padding_strides_03.pdf}
+            \includegraphics[width=0.2\linewidth]{figures/no_padding_strides_00.pdf}
+            \includegraphics[width=0.2\linewidth]{figures/no_padding_strides_01.pdf} \\
+            \includegraphics[width=0.2\linewidth]{figures/no_padding_strides_02.pdf}
+            \includegraphics[width=0.2\linewidth]{figures/no_padding_strides_03.pdf}
             \caption{Stride two convolutions \cite{dumoulin2016guide}.}
         \end{figure}
-				\item[$\rightarrow$ Down-sampling]
+				\item[$\rightarrow$] Down-sampling
 		\end{itemize}
 	\end{frame}
 	
@@ -302,16 +302,16 @@
     \end{frame}
 		}
 
-    \begin{frame}{Visualization of padded convolution}
-        \begin{figure}
-            \centering
-            \includegraphics[width=0.25\linewidth]{./figures/full_padding_no_strides_00.pdf}
-            \includegraphics[width=0.25\linewidth]{./figures/full_padding_no_strides_01.pdf} \\
-            \includegraphics[width=0.25\linewidth]{./figures/full_padding_no_strides_02.pdf}
-            \includegraphics[width=0.25\linewidth]{./figures/full_padding_no_strides_03.pdf}
-            \caption{Fully padded convolutions with unit strides \cite{dumoulin2016guide}.}
-        \end{figure}
-    \end{frame}
+    %\begin{frame}{Visualization of padded convolution}
+        %\begin{figure}
+            %\centering
+            %\includegraphics[width=0.25\linewidth]{./figures/full_padding_no_strides_00.pdf}
+            %\includegraphics[width=0.25\linewidth]{./figures/full_padding_no_strides_01.pdf} \\
+            %\includegraphics[width=0.25\linewidth]{./figures/full_padding_no_strides_02.pdf}
+            %\includegraphics[width=0.25\linewidth]{./figures/full_padding_no_strides_03.pdf}
+            %\caption{Fully padded convolutions with unit strides \cite{dumoulin2016guide}.}
+        %\end{figure}
+    %\end{frame}
 
     \begin{frame}{Summary}
         \begin{itemize}
@@ -396,7 +396,7 @@
 
 		\begin{frame}{Calculating the output size}
 		\[
-		W_{out} = (W_{in}-K+2P)/S)+1
+		W_{out} = (W_{in}-K+2P)/S+1
 		\]
 	\begin{itemize}
 		\item $W_{in}$: input size (width or height)
